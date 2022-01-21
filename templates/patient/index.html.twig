@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('datatable/datatables.min.css') }}">
 {% endblock %}
 {% block title %}Patient index{% endblock %}
 
@@ -56,8 +55,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card-block table-border-styl">
-                                <div class="table-responsive">
+                            <div class="card-block">
+                                <div class="table-responsive" id="patients">{{ 'loading'|trans({}, 'messages') }}</div>
+                               {# <div class="table-responsive">
                                     <table class="tabl" id="table_patient">
                                         <thead>
                                         <tr>
@@ -69,7 +69,7 @@
                                             <th>Situation familiale</th>
                                             <th>Adresse</th>
                                             <th>Telephone</th>
-                                           {# <th>Profession</th>#}
+                                           #}{# <th>Profession</th>#}{#
                                             <th>actions</th>
                                         </tr>
                                         </thead>
@@ -84,7 +84,7 @@
                                                 <td>{{ patient.situationfamiliale }}</td>
                                                 <td>{{ patient.adresse }}</td>
                                                 <td>{{ patient.telephone }}</td>
-                                               {# <td>{{ patient.profession }}</td>#}
+                                               #}{# <td>{{ patient.profession }}</td>#}{#
                                                 <td>
                                                     <a href="{{ path('patient_show', {'id': patient.id}) }}">show</a>
                                                     <a href="{{ path('patient_edit', {'id': patient.id}) }}">edit</a>
@@ -97,7 +97,7 @@
                                         {% endfor %}
                                         </tbody>
                                     </table>
-                                </div>
+                                </div>#}
 
                             </div>
                         </div>
@@ -107,5 +107,10 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script type="application/javascript">
+        $(function () {
+            $('#patients').initDataTables({{ datatable_settings(datatable) }});
+        });
+    </script>
     {% include 'patient/javascript.html.twig' %}
 {% endblock %}

@@ -8,6 +8,11 @@ use App\Repository\AntecedantPatientRepository;
 use App\Repository\ConsultationRepository;
 use App\Repository\PatientRepository;
 use App\Repository\RendezvousRepository;
+use Doctrine\ORM\QueryBuilder;
+use Omines\DataTablesBundle\Adapter\Doctrine\ORMAdapter;
+use Omines\DataTablesBundle\Column\TextColumn;
+use Omines\DataTablesBundle\Column\TwigColumn;
+use Omines\DataTablesBundle\DataTableFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -27,26 +32,68 @@ class PatientController extends AbstractController
     private $consultationRepository;
     private $rendezvousRepository;
     private $antecedantRepository;
+    private $dataTableFactory;
 
     /**
      * PatientController constructor.
      * @param $patientRepository
      */
-    public function __construct(AntecedantPatientRepository $antecedantPatientRepository,ConsultationRepository $consultationRepository,RendezvousRepository $rendezvousRepository,PatientRepository $patientRepository)
+    public function __construct(DataTableFactory $dataTableFactory,AntecedantPatientRepository $antecedantPatientRepository,ConsultationRepository $consultationRepository,RendezvousRepository $rendezvousRepository,PatientRepository $patientRepository)
     {
         $this->patientRepository = $patientRepository;
         $this->consultationRepository=$consultationRepository;
         $this->rendezvousRepository=$rendezvousRepository;
         $this->antecedantRepository=$antecedantPatientRepository;
+        $this->dataTableFactory=$dataTableFactory;
     }
 
     /**
-     * @Route("/", name="patient_index", methods={"GET"})
+     * @Route("/", name="patient_index", methods={"GET","POST"})
      */
-    public function index(PatientRepository $patientRepository): Response
+    public function index(Request $request): Response
     {
+        $table = $this->dataTableFactory->create()
+
+            ->add('code', TextColumn::class, [
+                'label' => 'code',
+            ])
+            ->add('nomComplet', TextColumn::class,[
+                'label' => 'name',
+            ])
+            ->add('sexe', TextColumn::class,[
+                'label' => 'sexe',
+            ])
+            ->add('telephone', TextColumn::class,[
+                'label' => 'phone',
+            ])
+            ->add('profession', TextColumn::class,[
+                'label' => 'profession',
+            ])
+            ->add('situationfamiliale', TextColumn::class,[
+                'label' => 'status',
+            ])
+            ->add('id', TwigColumn::class, [
+                'className' => 'buttons',
+                'label' => 'action',
+                'template' => 'patient/button.html.twig',
+                'render' => function ($value, $context) {
+                    return $value;
+                }])
+            ->createAdapter(ORMAdapter::class, [
+                'entity' => Patient::class,
+                'query' => function (QueryBuilder $builder) {
+                    $builder
+                        ->select('e')
+                        ->from(Patient::class, 'e')
+                        ->orderBy('e.id', 'DESC')
+                    ;
+                }
+            ])->handleRequest($request);
+        if ($table->isCallback()) {
+            return $table->getResponse();
+        }
         return $this->render('patient/index.html.twig', [
-            'patients' => $patientRepository->findAll(),
+            'datatable' => $table
         ]);
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eb67f195843c1858af89b1e51ff526a7",
+    "content-hash": "82937a65e48d676c6e45ca6482c40d62",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -2246,16 +2246,16 @@
         },
         {
             "name": "omines/datatables-bundle",
-            "version": "0.5.3",
+            "version": "0.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/omines/datatables-bundle.git",
-                "reference": "87e006613f685a89dfc8d06a77bc75f004835e59"
+                "reference": "b8a16c365f9d8e97d1e890e8783249f979f0d7ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/omines/datatables-bundle/zipball/87e006613f685a89dfc8d06a77bc75f004835e59",
-                "reference": "87e006613f685a89dfc8d06a77bc75f004835e59",
+                "url": "https://api.github.com/repos/omines/datatables-bundle/zipball/b8a16c365f9d8e97d1e890e8783249f979f0d7ca",
+                "reference": "b8a16c365f9d8e97d1e890e8783249f979f0d7ca",
                 "shasum": ""
             },
             "require": {
@@ -2268,7 +2268,7 @@
             },
             "require-dev": {
                 "doctrine/common": "^2.6|^3.0",
-                "doctrine/doctrine-bundle": "^2.1|^3.0",
+                "doctrine/doctrine-bundle": "^2.3|^3.0",
                 "doctrine/orm": "^2.6.3",
                 "doctrine/persistence": "^1.3.4|^2.0",
                 "ext-curl": "*",
@@ -2279,7 +2279,6 @@
                 "mongodb/mongodb": "^1.2",
                 "ocramius/package-versions": "^1.4",
                 "phpoffice/phpspreadsheet": "^1.6",
-                "phpunit/phpunit": "^8.5|^9.0",
                 "ruflin/elastica": "^6.0",
                 "symfony/browser-kit": "^4.4|^5.0",
                 "symfony/css-selector": "^4.4|^5.0",
@@ -2340,9 +2339,9 @@
             ],
             "support": {
                 "issues": "https://github.com/omines/datatables-bundle/issues",
-                "source": "https://github.com/omines/datatables-bundle/tree/0.5.3"
+                "source": "https://github.com/omines/datatables-bundle/tree/0.5.5"
             },
-            "time": "2021-01-20T13:43:24+00:00"
+            "time": "2021-06-29T08:12:37+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -8856,7 +8855,8 @@
     "platform": {
         "php": ">=7.2.5",
         "ext-ctype": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
