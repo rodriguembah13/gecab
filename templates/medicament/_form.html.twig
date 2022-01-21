@@ -1,0 +1,11 @@
+{{ form_start(form) }}
+    {{ form_row(form.libelle) }}
+ {{  form_row(form.code) }}
+ {{  form_row(form.dosage) }}
+ {{  form_row(form.description) }}
+<h4 class="sub-title"></h4>
+{% if form.saveAndCreateNew %}
+    {{ form_widget(form.saveAndCreateNew, {label: 'save and create_new', attr: {class: 'btn btn-primary'}}) }}
+{% endif %}
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

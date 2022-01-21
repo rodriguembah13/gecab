@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}profil {{ user.username }}{% endblock %}
+
+{% block body %}
+<!-- Main-body start -->
+<div class="main-body">
+    <div class="page-wrapper">
+        <div class="page-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <div>
+                        {% if app.user.imageFilename is defined and app.user.imageFilename  is not null %}
+                            <img id="img_emp" class="img-80 img-radius"
+                                 src="{{ asset('uploads/' ~ app.user.imageFilename) }}" title="my image"
+                                 alt="My image">
+                        {% else %}  <img id="img_emp" class="img-100 img-radius"
+                                         src="{{ asset('assets/images/default_avatar.png') }}" title="my image"
+                                         alt="My image">
+                        {% endif %}
+                        </div>
+                        <hr>
+
+                        <ul class="list-group">
+                            <li class="list-group-item">Name: {{ user.fullName }}</li>
+                            <li class="list-group-item">Email: {{ user.email }}</li>
+                            <li class="list-group-item">Phone: {{ user.phone }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header">
+                            Edit Profil
+                        </div>
+                        <div class="card-block table-border-styl">
+                            <form action="{{ path('profil') }}" method="post" enctype="multipart/form-data">
+                            <div class="col-md-8">
+                            <div class="form-group row">
+                                <label class="form-control-label">Full Name
+                                </label>
+                                    <input name="fullname" type="text" class="form-control"
+                                           value="{{ user.fullName }}">
+                            </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label">Phone
+                                    </label>
+                                    <input name="phone" type="text" class="form-control"
+                                           value="{{ user.phone }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+                            </div>
+                                <button class="btn btn-primary">Update profile</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div></div>
+{% endblock %}

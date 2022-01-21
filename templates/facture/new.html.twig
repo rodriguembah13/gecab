@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Facture{% endblock %}
+
+{% block body %}
+    <!-- Main-body start -->
+    <div class="main-body">
+        <div class="page-wrapper">
+            <!-- Page-header start -->
+            <div class="page-header card">
+                <div class="row align-items-end">
+                    <div class="col-lg-8">
+                        <div class="page-header-title">
+                            <i class="icofont icofont-layout bg-c-blue"></i>
+                            <div class="d-inline">
+                                <h4>Ajouter medicament</h4>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="page-header-breadcrumb">
+                            <ul class="breadcrumb-title">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('homepage') }}">
+                                        <i class="icofont icofont-home"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item"><a
+                                            href="{{ path('entity_medicament_index') }}">Medicament</a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#">New</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page-header end -->
+            <!-- Page-body start -->
+            <div class="page-body">
+                <!-- Basic table card start -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-md-6">
+                            {{ form_start(form) }}
+                            {{ form_widget(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                        <div class="card-header-right">
+                            <a class="btn btn-warning" style="margin-top: 25px" id="listprestation"><i class="icofont icofont-recycle"></i> afficher les prestations</a>
+                            <button class="btn btn-skew" style="margin-top: 25px"><i class="icofont icofont-print"></i> print</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered" id="table_prestation">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantite</th>
+                                <th>Tva</th>
+                                <th>Total</th>
+                                <th>actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        <h5 class="sub-title"></h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group row">
+                                    <label class="col-form-label">Mode paiement</label>
+                                    <div class="">
+                                        <select name="select" class="form-control">
+                                            <option value="">Choisir un moyen de paiement</option>
+                                            <option value="opt2">Especes</option>
+                                            <option value="opt3">Mobile money</option>
+                                            <option value="opt4">Chéque</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="facture_montantht" class="col-form-label">Montant ht</label>
+                                    <div class="">
+                                        <input disabled  id="facture_montantht" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="facture_totaltva" class="col-form-label">Total tva</label>
+                                    <div class="">
+                                        <input disabled  id="facture_totaltva" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="facture_net_apayer" class="col-form-label">Net a payer</label>
+                                    <div class="">
+                                        <input disabled id="facture_net_apayer" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                        <div class="col-md-4 form-group row">
+                            <label for="facture_montantverser" class="col-form-label col-md-5">Montant verse</label>
+                            <div class="col-md-7">
+                                <input id="facture_montantverser" type="number" class="form-control">
+                            </div>
+                        </div>
+                            <div class="col-md-4">
+                        <button class="btn btn-primary" id="save_facture"><i class="icofont icofont-save"></i> Save</button>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'facture/javascript.html.twig' %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hospitalisation{% endblock %}
+
+{% block body %}
+    <h1>Hospitalisation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ hospitalisation.id }}</td>
+            </tr>
+            <tr>
+                <th>DateBegin</th>
+                <td>{{ hospitalisation.dateBegin ? hospitalisation.dateBegin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DateEnd</th>
+                <td>{{ hospitalisation.dateEnd ? hospitalisation.dateEnd|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('hospitalisation_index') }}">back to list</a>
+
+    <a href="{{ path('hospitalisation_edit', {'id': hospitalisation.id}) }}">edit</a>
+
+    {{ include('hospitalisation/_delete_form.html.twig') }}
+{% endblock %}

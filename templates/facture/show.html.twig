@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture{% endblock %}
+
+{% block body %}
+    <div class="main-body">
+        <div class="page-wrapper">
+            <!-- Page-header start -->
+            <div class="page-header card">
+                <div class="row align-items-end">
+                    <div class="col-lg-8">
+                        <div class="page-header-title">
+                            <i class="icofont icofont-layout bg-c-blue"></i>
+                            <div class="d-inline">
+                                <h4>Detail Facture {{ facture.patient.nomComplet }}</h4>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="page-header-breadcrumb">
+                            <ul class="breadcrumb-title">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('homepage') }}">
+                                        <i class="icofont icofont-home"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="{{ path('facture_index') }}">Factures</a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#">Detail</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page-header end -->
+            <!-- Page-body start -->
+            <div class="page-body">
+                <!-- Basic table card start -->
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-block">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantite</th>
+                                <th>Tva</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in facture.factureItems %}
+                                <tr>
+                                    <td></td>
+                                    <td>{{ item.item }}</td>
+                                    <td>{{ item.amount }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.tva }}</td>
+                                    <td>{{ item.amount * item.quantity }}</td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                        <label>Montant total: <span class="label label-success">{{ facture.total }}</span></label> <label>Montant verser:  <span class="label label-info">{{ facture.total - facture.amountDue }}</span></label><label>Reste: <span class="label label-danger"> {{ facture.amountDue }}</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

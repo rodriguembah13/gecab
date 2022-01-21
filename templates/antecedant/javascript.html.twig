@@ -1,0 +1,68 @@
+<script src="{{ asset('datatable/datatables.min.js') }}"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+        $('#table_antecedant').DataTable({
+            columnDefs: [
+
+                {//date
+                    visible: true,
+                    targets: 0,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {//name
+                    visible: true,
+                    targets: 1,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {//action
+                    visible: true,
+                    targets: 4,
+                    className: "text-center",
+                    render: function (data, type, full, meta) {
+//console.log(data);
+                        return '<div class="btn-group btn-group-sm"><a id="editBtn" class="btn btn-success" type="button"  href="/antecedant/'+data.id+'/edit">Edit</a>' +
+                            '&nbsp;&nbsp;<button id="deleteBtn" class="btn btn-danger btn-flat delete" name="deleteBtn" type="button" >Delete</button></div>';
+
+                    }
+                }
+            ],
+            ajax:{
+                url:  '{{ path('getantecedants') }}',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function(data){
+
+                    populateDataTable(data);
+                },
+                error: function (e) {
+                    console.log("There was an error with your request...");
+                    console.log("error: " + JSON.stringify(e));
+                }
+            }//ajax
+
+        }); // table
+
+        function populateDataTable(data) {
+            $("#table_antecedant").DataTable().clear();
+            var row = 1;
+            $.each(data, function (index, value) {
+                $('#table_antecedant').dataTable().fnAddData( [
+                    row,
+                    value.code,
+                    value.libelle,
+                    value.groupe,
+                    value
+                ]);
+
+                row++;
+            });
+        }})
+</script>
+
+

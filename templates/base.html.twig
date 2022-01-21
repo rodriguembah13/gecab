@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{% block title %} GE-CABMED{% endblock %}</title>
+
+    {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/icon/themify-icons/themify-icons.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/icon/icofont/css/icofont.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/select2/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/daterangepicker/daterangepicker.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/jquery.mCustomScrollbar.css') }}">
+        {# {{ encore_entry_link_tags('app') }} #}
+    {% endblock %}
+
+    {# {% block javascripts %}
+
+        {% endblock %} #}
+    {% block javascripts %}
+        {# {{ parent() }} #}
+        <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('assets/js/popper.js/popper.min.js') }}"></script>
+        <script src="{{ asset('assets/js/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('assets/js/jquery-slimscroll/jquery.slimscroll.js') }}"></script>
+        <script src="{{ asset('assets/js/modernizr/modernizr.js') }}"></script>
+        <script src="{{ asset('assets/pages/widget/amchart/amcharts.min.js') }}"></script>
+        <script src="{{ asset('assets/pages/widget/amchart/serial.min.js') }}"></script>
+        <script src="{{ asset('assets/pages/todo/todo.js') }}"></script>
+        <script src="{{ asset('assets/pages/dashboard/custom-dashboard.js') }}"></script>
+        <script src="{{ asset('assets/js/script.js') }}"></script>
+        <script src="{{ asset('assets/js/SmoothScroll.js') }}"></script>
+        <script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
+        <script src="{{ asset('assets/js/demo-12.js') }}"></script>
+        <script src="{{ asset('assets/select2/select2.min.js') }}"></script>
+        <script src="{{ asset('assets/daterangepicker/moment.min.js') }}"></script>
+        <script src="{{ asset('assets/daterangepicker/daterangepicker.js') }}"></script>
+        <script src="{{ asset('assets/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+        <script>
+            $(document).ready(function () {
+                $(".selectpicker").select2(
+                );
+                $('#precription_medicament').select2({
+                    dropdownParent: $('#ordonanceModal')
+                });
+                $('#rendezvous_patient_medecin').select2({
+                    dropdownParent: $('#rendezvousModal')
+                });
+                $('#patient_dateNaissance').daterangepicker({
+                    dropdownParent: $('.modal-dialog')
+                });
+                /*     $('[data-datepickerenable="on"]').daterangepicker({
+                         singleDatePicker: true,
+                         showDropdowns: true,
+                         locale: {
+                             format: "YYYY-MM-DD",
+                             firstDay: 1
+                         }
+                     });*/
+
+                $('.daterangepickertime2').daterangepicker({
+                    timePicker: true,
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    startDate: moment(),
+                    locale: {
+                        format: "Y-M-D hh:mm",
+                        firstDay: 1
+                    }
+                });
+                $('.daterangepicker2').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    startDate: moment(),
+                    locale: {
+                        format: "Y-M-D",
+                        firstDay: 1
+                    }
+                });
+            });
+
+            var $window = $(window);
+            var nav = $('.fixed-button');
+            $window.scroll(function () {
+                if ($window.scrollTop() >= 200) {
+                    nav.addClass('active');
+                } else {
+                    nav.removeClass('active');
+                }
+            });
+        </script>
+    {% endblock %}
+</head>
+<body>
+<!-- Pre-loader start -->
+<div class="theme-loader">
+    <div class="ball-scale">
+        <div class='contain'>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+            <div class="ring">
+                <div class="frame"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pre-loader end -->
+<div id="pcoded" class="pcoded">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        {% include 'nav.html.twig' %}
+        <div class="pcoded-main-container">
+            <div class="pcoded-wrapper">
+                {% include 'siderbar.html.twig' %}
+                <div class="pcoded-content">
+                    <div class="pcoded-inner-content">
+                        {% block body %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="overlay">
+    <div class="cv-spinner">
+        <span class="spinner"></span>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<script src="{{ asset('datatable/datatables.min.js') }}"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+   // $('.table-responsive').hide();
+    $('#table_patient').DataTable({
+        columnDefs: [
+
+            {//date
+                visible: true,
+                targets: 0,
+                className: 'text-center',
+                render: function (data, type, full, meta) {
+                    return  data;
+                }
+            },
+            {//name
+                visible: true,
+                targets: 1,
+                className: 'text-center',
+                render: function (data, type, full, meta) {
+                    return  data;
+                }
+            },
+            {//action
+                visible: true,
+                targets: 8,
+                //className: "text-center",
+                render: function (data, type, full, meta) {
+//console.log(data);
+                    return '<div class="btn-group btn-group-sm"><a class="btn btn-warning" type="button"  href="/patient/'+data+'/"><i class="ti-folder"></i></a><a id="editBtn" class="btn btn-success" type="button"  href="/patient/'+data+'/edit"><i class="icofont icofont-edit"></i></a>' +
+                        '<a id="deleteBtn" class="btn btn-danger" type="button" ><i class="ti-trash"></i></a></div>';
+
+                }
+            }
+        ],
+        ajax:{
+            url:  '{{ path('patient_index_ajax') }}',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(data){
+
+                populateDataTable(data);
+            },
+            error: function (e) {
+                console.log("There was an error with your request...");
+                console.log("error: " + JSON.stringify(e));
+            }
+        }//ajax
+
+    }); // table
+
+    function populateDataTable(data) {
+        $("#table_patient").DataTable().clear();
+        var row = 1;
+        $.each(data, function (index, value) {
+            $('#table_patient').dataTable().fnAddData( [
+                value.code,
+                value.name,
+                value.civilite,
+                value.birtday,
+                value.sexe,
+                value.situation,
+                value.adresse,
+                value.phone,
+                value.id
+            ]);
+
+            row++;
+        });
+    }})
+</script>

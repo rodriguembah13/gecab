@@ -1,0 +1,27 @@
+<li class="header-notification">
+    <a href="#!">
+        <i class="ti-bell"></i>
+        <span class="badge bg-c-pink">{{ total }}</span>
+    </a>
+    <ul class="show-notification">
+        <li>
+            <h6>Notifications</h6>
+            <label class="label label-danger">{{ notifications|length }}</label>
+        </li>
+        {% for notice in notifications %}
+        <li><a {% if notice.type == 'salleattente' %} href="{{ path('home_salle_attente_show',{'id':notice.id }) }}" {% else %} href="#" {% endif %}>
+            <div class="media">
+               {# <img class="d-flex align-self-center img-radius"
+                     src="{{ asset('/assets/images/avatar-4.jpg') }}" alt="Generic placeholder image">#}
+                <div class="media-body">
+                    <h5 class="notification-user">{{ notice.icon }} </h5>
+                    <p class="notification-msg">{{ notice.message }}</p>
+                    <span class="notification-time">30 minutes ago</span>
+                    <span class="ti-check"><a></a></span>
+                </div>
+            </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</li>

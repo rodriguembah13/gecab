@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SalleAttente{% endblock %}
+
+{% block body %}
+    <!-- Main-body start -->
+    <div class="main-body">
+        <div class="page-wrapper">
+            <!-- Page-body start -->
+            <div class="page-body">
+                <!-- Basic table card start -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4>{{ salle_attente.patient.nomComplet }}</h4>
+                        <span>Né le {{ salle_attente.patient.dateNaissance | date('Y-m-d') }}  Age: {{ salle_attente.patient.calulAge }} ans</span>
+
+                    </div>
+                    <div class="card-block">
+
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <td>{{ salle_attente.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date d'arriveé</th>
+                                <td>{{ salle_attente.createdAt ? salle_attente.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Heure d'arrivée</th>
+                                <td>{{ salle_attente.heureArrive ? salle_attente.heureArrive|date('H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Heure de fin</th>
+                                <td>{{ salle_attente.heureFin ? salle_attente.heureFin|date('H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Motif</th>
+                                <td>{{ salle_attente.motif }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-primary" href="{{ path('consultation_new_salleatente',{'id': salle_attente.id }) }}"><i class="icofont icofont-connection"></i> Consultation</a>
+                        <a class="btn btn-warning" href="{{ path('patient_show',{'id': salle_attente.patient.id}) }}"><i class="icofont icofont-folder-open"></i>Dossier medical</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

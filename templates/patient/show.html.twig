@@ -1,0 +1,248 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Patient{% endblock %}
+
+{% block body %}
+    <!-- Main-body start -->
+    <div class="main-body">
+        <div class="page-wrapper">
+            <!-- Page-header start -->
+            <div class="page-header card">
+                <div class="row align-items-end">
+                    <div class="col-lg-8">
+                        <div class="page-header-title">
+                            <i class="icofont icofont-layout bg-c-blue"></i>
+                            <div class="d-inline">
+                                <h4>{{ patient.nomComplet }}</h4>
+                                <span>Né le {{ patient.dateNaissance | date('Y-m-d') }}  Age: {{ patient.calulAge }} ans</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="page-header-breadcrumb">
+                            <ul class="breadcrumb-title">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('homepage') }}">
+                                        <i class="icofont icofont-home"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="{{ path('patient_index') }}">Patient</a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#">Dossier</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page-header end -->
+            <!-- Page-body start -->
+            <div class="page-body">
+                <!-- Basic table card start -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Informations personnelle</h5>
+                        <span>use class <code>table</code> inside table element</span>
+                        <div class="card-header-right">
+                            <ul class="list-unstyled card-option">
+                                <li><i class="icofont icofont-simple-left "></i></li>
+                                <li><i class="icofont icofont-maximize full-card"></i></li>
+                                <li><i class="icofont icofont-minus minimize-card"></i></li>
+                                <li><i class="icofont icofont-refresh reload-card"></i></li>
+                                {#<li><i class="icofont icofont-error close-card"></i></li>#}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-block">
+
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th>N°</th>
+                                <td>{{ patient.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Code</th>
+                                <td>{{ patient.code }}</td>
+                            </tr>
+                            <tr>
+                                <th>NomComplet</th>
+                                <td>{{ patient.nomComplet }}</td>
+                            </tr>
+                            <tr>
+                                <th>Civilite</th>
+                                <td>{{ patient.civilite }}</td>
+                            </tr>
+                            <tr>
+                                <th>DateNaissance</th>
+                                <td>{{ patient.dateNaissance ? patient.dateNaissance|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Sexe</th>
+                                <td>{{ patient.sexe }}</td>
+                            </tr>
+                            <tr>
+                                <th>Situationfamiliale</th>
+                                <td>{{ patient.situationfamiliale }}</td>
+                            </tr>
+                            <tr>
+                                <th>Adresse</th>
+                                <td>{{ patient.adresse }}</td>
+                            </tr>
+                            <tr>
+                                <th>Telephone</th>
+                                <td>{{ patient.telephone }}</td>
+                            </tr>
+                            <tr>
+                                <th>Profession</th>
+                                <td>{{ patient.profession }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- antecedant et paiements card start
+                    <div class="card-block">-->
+                        <!-- Single Open Accordion start -->
+                        <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-header-text">Antecedant medicaux</h5>
+                                </div>
+                                <div class="card-block">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Libelle</th>
+                                            <th>Traitement</th>
+                                            <th>Date debut</th>
+                                            <th>Date Fin</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for ant in antecedants %}
+                                            <tr>
+                                                <td>{{ ant.antecedant }}</td>
+                                                <td>{{ ant.traitement }}</td>
+                                                <td>{{ ant.dateBegin|date('Y-m-d h:m') }}</td>
+                                                <td>{{ ant.dateBegin|date('Y-m-d h:m') }}</td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="3">no records found</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-header-text">Liste des paiements</h5>
+                                </div>
+                                <div class="card-block">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Date de rendez-vous</th>
+                                            <th>Medecin</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for rd in rendezvous %}
+                                            <tr>
+                                                <td>{{ rd.id }}</td>
+                                                <td>{{ rd.dateRdv|date('Y-m-d h:m') }}</td>
+                                                <td>{{ rd.medecin }}</td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="3">no records found</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> </div>
+                    <!-- Row end
+                    </div>-->
+            <!-- consultations et rendez-vous card start
+            <div class="card-block"> -->
+                <!-- Single Open Accordion start -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-header-text">Listes de consultations</h5>
+                            </div>
+                            <div class="card-block accordion-block">
+                                <div class="accordion-box" id="single-open">
+                                    {% for cons in consultations %}
+                                        <a class="accordion-msg">consultation du {{ cons.createdAt | date('Y-m-d') }}</a>
+                                        <div class="accordion-desc">
+                                            <p><span style="font-size: 14px;font-weight: bold"> Motif:</span> {{ cons.motif }}</p>
+                                            <p><span style="font-size: 14px;font-weight: bold"> Dianostique:</span> {{ cons.dianostique }}</p>
+                                            <p><span style="font-size: 14px;font-weight: bold"> Medecin:</span> {{ cons.medecin }}</p>
+                                            <h5>Infomations</h5>
+                                            <h5 class="sub-title"></h5>
+                                            <p><span style="font-size: 14px;font-weight: bold"> Taille:</span> {{ cons.taille }}</p>
+                                            <p><span style="font-size: 14px;font-weight: bold"> Poids:</span> {{ cons.poids }}</p>
+                                            <p><span style="font-size: 14px;font-weight: bold"> Pools:</span> {{ cons.pools }}</p>
+                                            <p><span style="font-size: 14px;font-weight: bold"> Temperature:</span> {{ cons.temperature }}</p>
+                                            <p><span style="font-size: 14px;font-weight: bold"> Taille:</span> {{ cons.taille }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Single Open Accordion ends -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-header-text">Liste des rendez-vous</h5>
+                            </div>
+                            <div class="card-block accordion-block">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Date de rendez-vous</th>
+                                        <th>Medecin</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for rd in rendezvous %}
+                                        <tr>
+                                            <td>{{ rd.id }}</td>
+                                            <td>{{ rd.dateRdv|date('Y-m-d h:m') }}</td>
+                                            <td>{{ rd.medecin }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="3">no records found</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> </div>
+            <!-- Row end
+        </div> -->
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/pages/accordion/accordion.js') }}"></script>
+{% endblock %}

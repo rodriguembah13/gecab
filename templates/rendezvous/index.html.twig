@@ -1,0 +1,204 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rendezvous index{% endblock %}
+ {% block stylesheets %}
+     {{ parent() }}
+     <link rel="stylesheet" href="{{ asset('fullcalendar/lib/main.css') }}">
+     <link rel="stylesheet" href="{{ asset('datatable/datatables.min.css') }}">
+ {% endblock %}
+{% block body %}
+    <!-- Main-body start -->
+    <div class="main-body">
+        <div class="page-wrapper">
+            <!-- Page-header start -->
+            <div class="page-header card">
+                <div class="row align-items-end">
+                    <div class="col-lg-8">
+                        <div class="page-header-title">
+                            <i class="icofont icofont-layout bg-c-blue"></i>
+                            <div class="d-inline">
+                                <h4>Rendez-vous</h4>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="page-header-breadcrumb">
+                            <ul class="breadcrumb-title">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('homepage') }}">
+                                        <i class="icofont icofont-home"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item"><a
+                                            href="{{ path('home_rendezvous_index') }}">Rendez-vous</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page-header end -->
+            <!-- Page-body start -->
+            <div class="page-body">
+                <!-- Basic table card start -->
+                <div class="card">
+                    <div class="card-header">
+                        <a class="btn btn-success" href="{{ path('rendezvous_new') }}"><i
+                                    class="icofont icofont-plus"></i> Nouveau</a>
+                        <a class="btn btn-primary float-right" href="#" id="select_table"><i
+                                    class="icofont icofont-table"></i> Table</a>
+                        <a class="btn btn-grd-warning float-right" href="#" id="select_calendar"><i
+                                    class="icofont icofont-calendar"></i> Calendar</a>
+                        {# <h5>Basic table</h5>
+                                <span>use class <code>table</code> inside table element</span> #}
+                    </div>
+                    <div class="card-block">
+                        <div id="event_render">
+                            <div id='loading'>loading...</div>
+
+                            <div id='calendar'></div>
+                        </div>
+                        <div class="table-responsive" id="table_rendere">
+                            <table class="table" id="table_rendezvous">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Patient</th>
+                                    <th>Medecin</th>
+                                    <th>Libelle</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('fullcalendar/lib/main.js') }}"></script>
+        <script src="{{ asset('datatable/datatables.min.js') }}"></script>
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                    },
+                    initialDate: '2021-04-08',
+                    editable: true,
+                    navLinks: true, // can click day/week names to navigate views
+                    dayMaxEvents: true, // allow "more" link when too many events
+                    events: {
+                        url: '{{ path('geteventsrendezvous') }}',
+                        failure: function () {
+                            document.getElementById('script-warning').style.display = 'block'
+                        }
+                    },
+                    loading: function (bool) {
+                        document.getElementById('loading').style.display =
+                            bool ? 'block' : 'none';
+                    }
+                });
+
+                calendar.render();
+            });
+            $(function () {
+                $('#table_rendere').hide();
+                $('#select_calendar').click(function () {
+
+                    /**/
+                    $('#event_render').show();
+                    // $('#select_calendar').hide();
+                    $('#table_rendere').hide();
+                });
+                $('#select_table').click(function () {
+                    $('#event_render').hide();
+                    $('#table_rendere').show();
+                    //  $('#select_calendar').show();
+                })
+            });
+        </script>
+        <script  type="text/javascript">
+            $(document).ready(function () {
+                // $('.table-responsive').hide();
+                $('#table_rendezvous').DataTable({
+                    columnDefs: [
+
+                        {//date
+                            visible: true,
+                            targets: 0,
+                            className: 'text-center',
+                            render: function (data, type, full, meta) {
+                                return  data;
+                            }
+                        },
+                        {//name
+                            visible: true,
+                            targets: 1,
+                            className: 'text-center',
+                            render: function (data, type, full, meta) {
+                                return  data;
+                            }
+                        },
+                        {//action
+                            visible: true,
+                            targets: 6,
+                            //className: "text-center",
+                            render: function (data, type, full, meta) {
+                                return '<div class="btn-group btn-group-sm"><a id="editBtn" class="btn btn-success" type="button"  href="/rendezvous/'+data.id+'/edit"><i class="icofont icofont-edit"></i></a>' +
+                                    '<a id="deleteBtn" class="btn btn-danger" type="button" ><i class="ti-trash"></i></a></div>';
+
+                            }
+                        }
+                    ],
+                    ajax:{
+                        url:  '{{ path('getindexsrendezvous') }}',
+                        type: 'GET',
+                        contentType: 'application/json',
+                        success: function(data){
+                            populateDataTable(data);
+                        },
+                        error: function (e) {
+                            console.log("There was an error with your request...");
+                            console.log("error: " + JSON.stringify(e));
+                        }
+                    }//ajax
+
+                }); // table
+
+                function populateDataTable(data) {
+                    $("#table_rendezvous").DataTable().clear();
+                    var row = 1;
+                    $.each(data, function (index, value) {
+                        $('#table_rendezvous').dataTable().fnAddData( [
+                            row,
+                            value.patient,
+                            value.medecin,
+                            value.libelle,
+                            value.daterv,
+                            value.status,
+                            value
+                        ]);
+
+                        row++;
+                    });
+                }})
+        </script>
+    {% endblock %}

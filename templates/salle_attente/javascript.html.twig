@@ -1,0 +1,104 @@
+<script src="{{ asset('datatable/datatables.min.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // $('.table-responsive').hide();
+        $('#table_salle_attente').DataTable({
+            columnDefs: [
+
+                {//date
+                    visible: true,
+                    targets: 0,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        return data;
+                    }
+                },
+              {//name
+                    visible: true,
+                    targets: 5,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        if (data ==='encours'){
+                          return '<button class="btn btn-primary btn-sm">En cours</button>'  ;
+                        }else if (data ==='attente'){
+                            return '<button class="btn btn-warning btn-sm">En attente</button>';
+                        } else{
+                            return '<button class="btn btn-success btn-sm">Termine</button>';
+                        }
+                    }
+                },
+                {//action
+                    visible: true,
+                    targets: 6,
+                    className: "text-center",
+                    render: function (data, type, full, meta) {
+                        if (data.status === 'attente') {
+                            return '<div class="btn-group btn-group-sm"> <a id="editBtn" class="btn btn-success btn-sm" type="button" href="/consultation/new/'+data.patient_id+'/"><i class="ti-shift-right-alt"></i></a>' +
+                                '&nbsp;&nbsp;<a  class="btn btn-warning btn-sm" type="button" href="/patient/'+data.patient_id+'/"><i class="ti-layout-tab"></i></a><button id="deleteBtn" class="btn btn-danger btn-sm" name="deleteBtn" type="button"  data-toggle="modal" onclick="getItem_id(' + data.patient_id + ')" data-target="#patientModal"><i class="ti-trash"></i></button></div>';
+
+                        }else {
+                            console.log(data)
+                            return '<div class="btn-group btn-group-sm"> <a id="editBtn" class="btn btn-warning btn-sm" type="button" href="/patient/'+data.patient_id+'/"><i class="ti-layout-tab"></i></a>' +
+                                '&nbsp;&nbsp;</div>';
+
+
+                        }
+
+                    }
+                }
+            ],
+            ajax: {
+                url: '{{ path('salle_attente_index_ajax') }}',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (data) {
+
+                    populateDataTable(data);
+                },
+                error: function (e) {
+                    console.log("There was an error with your request...");
+                    console.log("error: " + JSON.stringify(e));
+                }
+            }//ajax
+
+        }); // table
+
+        function populateDataTable(data) {
+            $("#table_salle_attente").DataTable().clear();
+            var row = 1;
+            $.each(data, function (index, value) {
+                $("#table_salle_attente").dataTable().fnAddData([
+                    row,
+                    value.patient,
+                    value.begin,
+                    value.end,
+                    value.motif,
+                    value.status,
+                    value,
+                ]);
+
+                row++;
+            });
+
+        }
+    })
+
+    function getItem_id(id) {
+        $('#salle_id').val(id);
+        $.ajax({
+            url: "{{ path('getonesalleattente') }}",
+            type: "GET",
+            dataType: "JSON",
+            data: {
+                id: id,
+            },
+            success: function (data) {
+                $("#overlay").fadeOut(300);
+                console.log(data)
+            },
+            error: function (err) {
+                $("#overlay").fadeOut(300);
+            }
+        });
+    }
+</script>

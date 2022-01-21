@@ -1,0 +1,124 @@
+<script src="{{ asset('datatable/datatables.min.js') }}"></script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+        $('#table_facture').DataTable({
+            columnDefs: [
+
+                {//date
+                    visible: true,
+                    targets: 0,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {//name
+                    visible: true,
+                    targets: 1,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {//action
+                    visible: true,
+                    targets: 6,
+                    className: "",
+                    render: function (data, type, full, meta) {
+//console.log(data);
+                        return '<div class="btn-group btn-group-sm"><a id="editBtn" class="btn btn-success" type="button"  href="/facture/'+data.id+'/"><i class="icofont icofont-eye"></i></a>' +
+                            '<button id="print" class="btn btn-warning btn-flat delete" data-toggle="tooltip" title="imprimer" name="printBtn" type="button" ><i class="icofont icofont-print"></i></button><button id="deleteBtn" class="btn btn-danger btn-flat delete" name="deleteBtn" type="button" ><i class="icofont icofont-trash"></i></button></div>';
+
+                    }
+                }
+            ],
+            ajax:{
+                url:  '{{ path('facture_index_ajax') }}',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function(data){
+
+                    populateDataTable(data);
+                },
+                error: function (e) {
+                    console.log("There was an error with your request...");
+                    console.log("error: " + JSON.stringify(e));
+                }
+            }//ajax
+
+        }); // table
+
+        function populateDataTable(data) {
+            $("#table_facture").DataTable().clear();
+            var row = 1;
+            $.each(data, function (index, value) {
+                $('#table_facture').dataTable().fnAddData( [
+                    row,
+                    value.patient,
+                    value.status,
+                    value.created_at,
+                    value.amount,
+                    value.amountdue,
+                    value
+                ]);
+
+                row++;
+            });
+
+        }
+        $('#listprestation').click(function () {
+            $("#overlay").fadeIn(300);
+            $.ajax({
+                url: "{{ path('getactespatient') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    patient: $('#facture_patient option:selected').val(),
+                },
+                success: function (data) {
+                    $("#overlay").fadeOut(300);
+                    $data=data.data;
+                    console.log($data)
+                    var table = $("#table_prestation>tbody");
+                    table.html('');
+                    for ($i=0;$i< $data.length;$i++){
+                        $("#table_prestation>tbody:last").append("<tr><td><input class='checkbox is-hide' type='checkbox' checked><span class='hidden'>" + $data[$i].id + "</span></td><td>" + $data[$i].item + "</td><td>" + $data[$i].price + "</td><td>" + $data[$i].quantite + "</td><td>" + $data[$i].tva + "</td><td>" + $data[$i].total + "</td></tr>");
+                    }
+                    $('#facture_montantht').val(data.montantht);
+                    $('#facture_totaltva').val(data.totaltva);
+                    $('#facture_net_apayer').val(data.montantnet);
+                },
+                error: function (err) {
+                    $("#overlay").fadeOut(300);
+                }
+            });
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            content: function() {
+                return $('#primary-popover-content').html();
+            }
+        });
+        $('#save_facture').click(function () {
+            $.ajax({
+                url: "{{ path('postfactureajax') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    patient: $('#facture_patient option:selected').val(),
+                    montant: $('#facture_montantverser').val()
+                },
+                success: function (data) {
+                    //console.log()
+                    //location.href="{{ path('facture_edit',{'id':1}) }}";
+                    location.href="{{ path('facture_index') }}";
+                },
+                error: function (err) {
+                    $("#overlay").fadeOut(300);
+                }
+            })
+        })
+    })
+</script>
+

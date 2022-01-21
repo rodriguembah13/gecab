@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Consultation index {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('datatable/datatables.min.css') }}">
+{% endblock %}
+{% block body %}
+    <!-- Main-body start -->
+    <div class="main-body">
+        <div class="page-wrapper">
+            <!-- Page-header start -->
+            <div class="page-header card">
+                <div class="row align-items-end">
+                    <div class="col-lg-8">
+                        <div class="page-header-title">
+                            <i class="icofont icofont-layout bg-c-blue"></i>
+                            <div class="d-inline">
+                                <h4>Consultations</h4>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="page-header-breadcrumb">
+                            <ul class="breadcrumb-title">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('homepage') }}">
+                                        <i class="icofont icofont-home"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="{{ path('consult_consultation_index') }}">Consultation</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page-header end -->
+            <!-- Page-body start -->
+            <div class="page-body">
+                <!-- Basic table card start -->
+                <div class="card">
+                    <div class="card-header">
+                        <a class="btn btn-success" href="{{ path('consultation_new') }}"><i
+                                    class="icofont icofont-plus"></i> Nouveau</a>
+                        <div class="card-header-right">
+                            <ul class="list-unstyled card-option">
+                                <li><i class="icofont icofont-simple-left "></i></li>
+                                <li><i class="icofont icofont-maximize full-card"></i></li>
+                                <li><i class="icofont icofont-minus minimize-card"></i></li>
+                                <li><i class="icofont icofont-refresh reload-card"></i></li>
+                                <li><i class="icofont icofont-error close-card"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-block table-border-styl">
+                        <div class="table-responsive">
+                            <table class="table" id="table_consultation">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Date de creation</th>
+                                    <th>Patient</th>
+                                    <th>Medecin</th>
+                                    <th>Motif</th>
+                                    <th>Dianostique</th>
+                                    <th>actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for consultation in consultations %}
+                                    <tr>
+                                        <td>{{ consultation.id }}</td>
+                                        <td>{{ consultation.motif }}</td>
+                                        <td>{{ consultation }}</td>
+                                        <td>
+                                            <a href="{{ path('consultation_show', {'id': consultation.id}) }}">show</a>
+                                            <a href="{{ path('consultation_edit', {'id': consultation.id}) }}">edit</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3">no records found</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'consultation/javascript.html.twig' %}
+{% endblock %}

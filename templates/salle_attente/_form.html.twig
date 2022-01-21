@@ -1,0 +1,15 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-md-9">
+        {{ form_row(form.patient) }}
+    </div>
+    <div class="col-md-3" style="margin-top: 25px">
+<a type="button" class="btn btn-primary" href="#" data-toggle="modal" data-target="#patientModal">Ajouter</a>
+    </div>
+</div>
+{{ form_row(form.medecin) }}
+{{ form_row(form.motif) }}
+
+<h4 class="sub-title"></h4>
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

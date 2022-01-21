@@ -1,0 +1,446 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <!-- Main-body start -->
+    <div class="main-body">
+        <div class="page-wrapper">
+            <!-- Page-header start -->
+            <div class="page-header card">
+                <div class="row align-items-end">
+                    <div class="col-lg-8">
+                        <div class="page-header-title">
+                            <i class="icofont icofont-layout bg-c-blue"></i>
+                            <div class="d-inline">
+                                <h4>{{ patient }}</h4>
+                                <span>Sexe: {{ patient.sexe }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="page-header-breadcrumb">
+                            <ul class="breadcrumb-title">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('homepage') }}">
+                                        <i class="icofont icofont-home"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="{{ path('consult_consultation_index') }}">Consultation</a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#">Edit</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page-header end -->
+            <!-- Page-body start -->
+            <div class="page-body">
+                <!-- Basic table card start -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Consultation</h5>
+                        {# <span> <code>table</code> inside table element</span> #}
+                        <div class="card-header-right">
+                            <ul class="list-unstyled card-option">
+                                <li><i class="icofont icofont-simple-left "></i></li>
+                                <li><i class="icofont icofont-maximize full-card"></i></li>
+                                <li><i class="icofont icofont-minus minimize-card"></i></li>
+                                <li><i class="icofont icofont-refresh reload-card"></i></li>
+                                <li><i class="icofont icofont-error close-card"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-block">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row (form.motif) }}
+                                {{ form_row (form.dianostique) }}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        {{ form_row (form.taille) }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form_row (form.poids) }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form_row (form.temperature) }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form_row (form.pools) }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form_row (form.uree) }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form_row (form.creatine) }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <h4 class="sub-title"></h4>
+                        <button class="btn btn-primary">{{ button_label|default('Update') }}</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- Material tab card start -->
+                        <div class="card">
+                            <div class="card-header">
+                                {# <h5>Material tab</h5> #}
+                                <div class="card-header-right">
+                                    <ul class="list-unstyled card-option">
+                                        <li><i class="icofont icofont-simple-left "></i></li>
+                                        <li><i class="icofont icofont-maximize full-card"></i></li>
+                                        <li><i class="icofont icofont-minus minimize-card"></i></li>
+                                        <li><i class="icofont icofont-refresh reload-card"></i></li>
+                                        <li><i class="icofont icofont-error close-card"></i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <!-- Row start -->
+                                <div class="row m-b-30">
+                                    <div class="col-lg-12">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs md-tabs" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-toggle="tab" href="#ordonance"
+                                                   role="tab">Ordonnances</a>
+                                                <div class="slide"></div>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#antecedant"
+                                                   role="tab">Antecedant</a>
+                                                <div class="slide"></div>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#actemedical" role="tab">Actes
+                                                    medicaux</a>
+                                                <div class="slide"></div>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#rendezvous" role="tab">Rendez-vous</a>
+                                                <div class="slide"></div>
+                                            </li>
+                                            {#<li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#document" role="tab">Rendez-vous</a>
+                                                <div class="slide"></div>
+                                            </li>#}
+                                        </ul>
+                                        <!-- Tab panes -->
+                                        <div class="tab-content card-block">
+                                            <div class="tab-pane active" id="ordonance" role="tabpanel">
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#ordonanceModal">Ajouter
+                                                </button>
+                                                <h4 class="sub-title"></h4>
+                                                <div class="table-responsive">
+                                                    <table class="table" id="table_ordonance">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Fiche</th>
+                                                            <th>Date</th>
+                                                            <th>Medecin</th>
+                                                            <th>actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for ord in ordonnances %}
+                                                            <tr>
+                                                                <td>{{ ord.patient.id }}</td>
+                                                                <td>{{ ord.createdAt | date('Y-m-d') }}</td>
+                                                                <td>{{ ord.medecin }}</td>
+                                                                <td>
+                                                                    <div class="btn-group btn-group-sm">
+                                                                        <a class="btn btn-warning" href="#"
+                                                                           onclick="detail_ordonance({{ ord.id }})"
+                                                                           data-toggle="modal"
+                                                                           data-target="#ordonanceDetailModal">Detail</a>
+                                                                        <a class="btn btn-danger" href="#">Delete</a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% else %}
+                                                            <tr>
+                                                                <td colspan="11">no records found</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="antecedant" role="tabpanel">
+                                                {{ form_start(form_antecedant) }}
+                                                <div class="row">
+                                                    <div class="col-md-3"> {{ form_row(form_antecedant.antecedant) }}</div>
+                                                    <div class="col-md-3"> {{ form_row(form_antecedant.traitement) }}</div>
+                                                    <div class="col-md-2"> {{ form_row(form_antecedant.dateBegin) }}</div>
+                                                    <div class="col-md-2"> {{ form_row(form_antecedant.dateEnd) }}</div>
+                                                    <a class="btn btn-warning"
+                                                       id="add_line_antecedant">{{ button_label|default('Ajouter') }}</a>
+                                                </div>
+
+
+                                                {{ form_end(form_antecedant) }}
+                                                <h4 class="sub-title"></h4>
+                                                <div class="table-responsive">
+                                                    <table class="table" id="table_antecedantpatient">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>antecedant</th>
+                                                            <th>type</th>
+                                                            <th>traitement</th>
+                                                            <th>Date de debut</th>
+                                                            <th>Date de fin</th>
+                                                            <th>actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for ant in antecedantPatients %}
+                                                            <tr>
+                                                                <td>{{ ant.antecedant }}</td>
+                                                                <td>{{ ant.groupe }}</td>
+                                                                <td>{{ ant.traitement }}</td>
+                                                                <td>{{ ant.dateBegin | date('Y-m-d') }}</td>
+                                                                <td>{{ ant.dateEnd | date('Y-m-d') }}</td>
+                                                                <td>
+                                                                    <div class="btn-group btn-group-sm"><a
+                                                                                class="btn btn-danger" href="#"><i
+                                                                                    class="icofont icofont-trash"></i></a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% else %}
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="actemedical" role="tabpanel">
+                                                <input id="libelle_acte" class="is-hide">
+                                                {{ form_start(form_facture) }}
+                                                <div class="row">
+                                                    <div class="col-md-3"> {{ form_row(form_facture.actemedical) }}</div>
+                                                    <div class="col-md-3"> {{ form_row(form_facture.amount) }}</div>
+                                                    <div class="col-md-2"> {{ form_row(form_facture.amountFinal) }}</div>
+                                                    <div class="col-md-2"> {{ form_row(form_facture.quantity) }}</div>
+                                                    <a class="btn btn-warning"
+                                                       id="add_line_facture">{{ button_label|default('Ajouter') }}</a>
+                                                </div>
+
+                                                {{ form_end(form_facture) }}
+                                                <h4 class="sub-title"></h4>
+                                                <div class="table-responsive">
+                                                    <table class="table" id="table_acte_patient">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Acte medical</th>
+                                                            <th>Montant par defaut</th>
+                                                            <th>Montant</th>
+                                                            <th>Quantite</th>
+                                                            <th>Total</th>
+                                                            <th>actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for ant in actesPatients %}
+                                                            <tr>
+                                                                <td>{{ ant.acteMedical.libelle }}</td>
+                                                                <td>{{ ant.amount }}</td>
+                                                                <td>{{ ant.amount }}</td>
+                                                                <td>{{ ant.quantity }}</td>
+                                                                <td>{{ ant.quantity * ant.amount }}</td>
+                                                                <td>
+                                                                    <div class="btn-group btn-group-sm"><a
+                                                                                class="btn btn-danger" href="#"><i
+                                                                                    class="icofont icofont-trash"></i></a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% else %}
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="rendezvous" role="tabpanel">
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#rendezvousModal">Ajouter
+                                                </button>
+                                                <h4 class="sub-title"></h4>
+                                                <div class="table-responsive">
+                                                    <table class="table" id="table_rendezvous">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Patient</th>
+                                                            <th>Medecin</th>
+                                                            <th>Libelle</th>
+                                                            <th>Date</th>
+                                                            <th>status</th>
+                                                            <th>actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for ord in rendezvouss %}
+                                                            <tr>
+                                                                <td>{{ ord.patient }}</td>
+                                                                <td>{{ ord.medecin }}</td>
+                                                                <td>{{ ord.libelle }}</td>
+                                                                <td>{{ ord.createdAt | date('Y-m-d h:m') }}</td>
+                                                                <td>{{ ord.status }}</td>
+                                                                <td>
+                                                                    <div class="btn-group btn-group-sm">
+                                                                        <a class="btn btn-warning" href="#"
+                                                                           onclick="detail_ordonance({{ ord.id }})"
+                                                                           data-toggle="modal"
+                                                                           data-target="#ordonanceDetailModal">Detail</a>
+                                                                        <a class="btn btn-danger" href="#">Delete</a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% else %}
+                                                            <tr>
+                                                                <td colspan="11">no records found</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                 </div>
+                                            <div class="tab-pane" id="document" role="tabpanel">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row end -->
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" style="overflow:hidden" id="ordonanceModal" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content card-body">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nouvelle ordonance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input value="{{ patient.id }}" class="is-hide" id="patient_id">
+                    <div class="container-fluid">
+                        {{ form_start(form_ordonance) }}
+                        <div class="row">
+                            <div class="col-md-4"> {{ form_row(form_ordonance.medicament) }}</div>
+                            <div class="col-md-3"> {{ form_row(form_ordonance.quantite) }}</div>
+                            <div class="col-md-2"> {{ form_row(form_ordonance.dosage) }}</div>
+                            {# <div class="col-md-2"> {{ form_row(form_ordonance.nombre) }}</div> #}
+                            <div class="col-md-3"><a type="button" id="add_prescription" class="btn btn-success"
+                                                     style="margin-top: 25px">{{ button_label|default('Ajouter') }}</a>
+                            </div>
+                        </div>
+                        {{ form_end(form_ordonance) }}
+                        <h4 class="sub-title"></h4>
+                        <table class="table table-bordered" id="table_line_ordonance">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Medicament</th>
+                                <th>Quantite</th>
+                                <th>Dosage</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <button class="btn btn-primary" type="button" id="save_prescription">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ordonanceDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detail ordonance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input value="{{ patient.id }}" class="is-hide" id="patient_id">
+                    <div class="container-fluid">
+                        <p>
+                        <h3>Patient: <span id="patient_detail_id"></span></h3> <h5>Age: <span
+                                    id="patient_detail_age"></span></h5></p>
+
+                        <h4 class="sub-title"></h4>
+                        <table class="table table-bordered" id="table_line_ordonance_detail">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Medicament</th>
+                                <th>Quantite</th>
+                                <th>Dosage</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" style="overflow:hidden" id="rendezvousModal" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content card-body">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nouveau rendez-vous</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input value="{{ patient.id }}" class="is-hide" id="patient_id">
+                        {{ form_start(form_rendezvous) }}
+                        {{ form_row(form_rendezvous.medecin) }}
+                             {{ form_row(form_rendezvous.dateRdv) }}
+                    {{ form_row(form_rendezvous.description) }}
+
+                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" id="save_rendezvous">Save</button>
+                </div>
+                {{ form_end(form_rendezvous) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'consultation/javascript.html.twig' %}
+{% endblock %}
+
+
+

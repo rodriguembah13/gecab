@@ -1,0 +1,254 @@
+<script src="{{ asset('datatable/datatables.min.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table_consultation').DataTable({
+            columnDefs: [
+
+                {//date
+                    visible: true,
+                    targets: 0,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        return data;
+                    }
+                },
+                {//name
+                    visible: true,
+                    targets: 1,
+                    className: 'text-center',
+                    render: function (data, type, full, meta) {
+                        return data;
+                    }
+                },
+                {//action
+                    visible: true,
+                    targets: 6,
+                    className: "text-center",
+                    render: function (data, type, full, meta) {
+//console.log(data);
+                        return '<div class="btn-group btn-group-sm"><a id="editBtn" class="btn btn-success" type="button"  href="/consultation/' + data.id +'/'+data.patient_id+'/edit"><i class="icofont icofont-edit"></i></a>' +
+                            '<button id="deleteBtn" class="btn btn-danger btn-flat delete" name="deleteBtn" type="button" ><i class="icofont icofont-trash"></i></button></div>';
+
+                    }
+                }
+            ],
+            ajax: {
+                url: '{{ path('consultation_index_ajax') }}',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (data) {
+
+                    populateDataTable(data);
+                },
+                error: function (e) {
+                    console.log("There was an error with your request...");
+                    console.log("error: " + JSON.stringify(e));
+                }
+            }//ajax
+
+        }); // table
+
+        function populateDataTable(data) {
+            $("#table_consultation").DataTable().clear();
+            var row = 1;
+            $.each(data, function (index, value) {
+                $('#table_consultation').dataTable().fnAddData([
+                    row,
+                    value.createdAt,
+                    value.patient,
+                    value.medecin,
+                    value.motif,
+                    value.dianostique,
+                    value
+                ]);
+
+                row++;
+            });
+        }
+        $('#add_prescription').click(function () {
+            //   if ($('#form_quantity').val()>=)
+            $.ajax({
+                url: "{{ path('getonemedicament') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    id: $('#precription_medicament option:selected').val(),
+                },
+                success: function (data) {
+                    console.log(data)
+                    var idtd = "line_" + data.id;
+                    var qte = $('#precription_quantite').val();
+                    var dosage = $('#precription_dosage').val();
+                    var table = $("#table_line_ordonance>tbody");
+                    $("#table_line_ordonance>tbody:last").append("<tr id='" + idtd + "'><td><input class='checkbox is-hide' type='checkbox' checked><span class='hidden'>" + data.id + "</span></td><td>" + data.libelle + "</td><td>" + qte + "</td><td>" + dosage + "</td><td><a onclick='removeRow(" + data.id + ")' class='btn btn-sm btn-danger'><i class='ti-trash'></i></a></td></tr>");
+                    setTimeout(function () {
+                        $("#overlay").fadeOut(300);
+                    }, 500);
+
+
+                },
+                error: function (err) {
+                    setTimeout(function () {
+                        $("#overlay").fadeOut(300);
+                    }, 500);
+                }
+            });
+        });
+        $('#save_prescription').click(function () {
+            jsonObj = [];
+            $("#table_line_ordonance>tbody input[type=checkbox]:checked").each(function () {
+                var row = $(this).closest('tr')[0];
+                var id = row.cells[0].children[1].innerText;
+                var quantity = row.cells[2].innerText;
+                var dosage = row.cells[3].innerText;
+                item = {};
+                item['quantity'] = quantity;
+                item['dosage'] = dosage;
+                item['id'] = id;
+                jsonObj.push(item)
+            });
+           // console.log(JSON.stringify({data:jsonObj}))
+           $.ajax({
+                url: "{{ path('saveordonance') }}",
+                type: "POST",
+                dataType: "JSON",
+                data: JSON.stringify({ob: jsonObj, consultation: 1,
+                    patient: $('#patient_id').val()}),
+                success: function (data) {
+                    window.location.reload(true);
+                    setTimeout(function () {
+                        $("#overlay").fadeOut(300);
+                    }, 500);
+                },
+                error: function (err) {
+                    setTimeout(function () {
+                        $("#overlay").fadeOut(300);
+                    }, 500);
+                }
+            });
+        });
+        $('#add_line_antecedant').click(function () {
+            $.ajax({
+                url: "{{ path('saveAntecedant') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    patient: $('#patient_id').val(),
+                    antecedant: $('#antecedant_patient_antecedant  option:selected').val(),
+                    traitement: $('#antecedant_patient_traitement').val(),
+                    begin:$('#antecedant_patient_dateBegin').val(),
+                    end:$('#antecedant_patient_dateEnd').val(),
+                },
+                success: function (data) {
+                    console.log(data);
+                    $data=data;
+                  //  $("#patient_detail_id").text(data.patient);
+                    var table = $("#table_antecedantpatient>tbody");
+                    // table.html('');
+
+                        $("#table_antecedantpatient>tbody:last").append("<tr><td>" + $data.antecedant + "</td><td>" + $data.traitement + "</td><td>" + $data.traitement + "</td><td>" + $data.begin + "</td><td>" + $data.end + "</td><td><div class='btn-group btn-group-sm'><button class='btn btn-danger'><i class='icofont icofont-trash'><i></button></div></td></tr>");
+
+
+                },
+                error: function (err) {
+                    $("#overlay").fadeOut(300);
+                }
+            });
+        })
+        $('#acte_patient_actemedical').change(function () {
+            $.ajax({
+                url: "{{ path('getoneactemedicals') }}",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    id: $('#acte_patient_actemedical option:selected').val(),
+                },
+                success: function (data) {
+                    $('#acte_patient_amount').val(data.prix);
+                    $('#libelle_acte').val(data.libelle);
+                    $('#acte_patient_quantity').val(1);
+
+                    setTimeout(function () {
+                        $("#overlay").fadeOut(300);
+                    }, 500);
+                },
+                error: function (err) {
+                    setTimeout(function () {
+                        $("#overlay").fadeOut(300);
+                    }, 500);
+                }
+            })
+        })
+        $('#add_line_facture').click(function () {
+            var qte = $('#acte_patient_quantity').val();
+            var pricefinal = $('#acte_patient_amountFinal').val();
+            var price = $('#acte_patient_amount').val();
+            var act_id= $('#acte_patient_actemedical option:selected').val();
+            var total = qte * price;
+            var idtd = "line_" + act_id;
+            var prodid = act_id;
+            var prix = null;
+            if (pricefinal == null || pricefinal === ""){
+                prix=price;
+                total= qte * price;
+            }else {
+                prix=pricefinal;
+                total= qte * pricefinal;
+            }
+            $.ajax({
+                url: "{{ path('saveactepatient') }}",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    actemedical: act_id,
+                    patient: $('#patient_id').val(),
+                    amount: prix,
+                    quantite: qte
+                },
+                success: function (data) {
+                    $data=data.data;
+                        var table = $("#table_acte_patient>tbody");
+                        $("#table_acte_patient>tbody:last").append("<tr id='" + idtd + "'><td><input class='checkbox is-hide' type='checkbox' checked><span class='hidden'>" + $('#libelle_acte').val() + "</span></td><td>" + price + "</td><td>" + prix + "</td><td>" + qte + "</td><td>" + total + "</td><td><a onclick='removeRow(" + prodid + "," + price + ")' class='btn btn-danger'><i class='icofont icofont-trash'></i></a></td></tr>");
+                    },
+                error: function (err) {
+                    $("#overlay").fadeOut(300);
+                }
+            });
+        });
+
+    })
+    function removeRow(id) {
+        line = "#line_" + id;
+        $(line).remove();
+    }
+    function detail_ordonance(id) {
+
+        $(function () {
+                $("#overlay").fadeIn(300);
+                $.ajax({
+                    url: "{{ path('prescription_index_ajax') }}",
+                    type: "GET",
+                    dataType: "JSON",
+                    data: {
+                        ordonance: id,
+                    },
+                    success: function (data) {
+                        $data=data.data;
+                        $("#patient_detail_id").text(data.patient);
+                        var table = $("#table_line_ordonance_detail>tbody");
+                        table.html('');
+                        for ($i=0;$i< $data.length;$i++){
+                            $("#table_line_ordonance_detail>tbody:last").append("<tr><td><input class='checkbox is-hide' type='checkbox' checked><span class='hidden'>" + $data[$i].id + "</span></td><td>" + $data[$i].libelle + "</td><td>" + $data[$i].quantity + "</td><td>" + $data[$i].dosage + "</td></tr>");
+                        }
+                        $("#overlay").fadeOut(300);
+                    },
+                    error: function (err) {
+                        $("#overlay").fadeOut(300);
+                    }
+                });
+
+            });
+    }
+</script>
+
+
