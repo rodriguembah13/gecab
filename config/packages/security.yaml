@@ -1,10 +1,19 @@
 security:
-    encoders:
+    #encoders:
+    # Our user class and the algorithm we'll use to encode passwords
+    # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
+    # https://symfony.com/doc/current/security.html#c-encoding-passwords
+    #App\Entity\User: 'auto'
+    # a new authentication system is available since Symfony 5.1 to make
+    # Symfony security more extensible and easier to understand
+    # https://symfony.com/doc/current/security/experimental_authenticators.html
+    enable_authenticator_manager: true
+
+    password_hashers:
         # Our user class and the algorithm we'll use to encode passwords
         # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
         # https://symfony.com/doc/current/security.html#c-encoding-passwords
         App\Entity\User: 'auto'
-
     providers:
         # https://symfony.com/doc/current/security/user_provider.html
         # In this example, users are stored via Doctrine in the database
@@ -25,7 +34,7 @@ security:
 
             # but the firewall does not require login on every page
             # denying access is done in access_control or in your controllers
-            anonymous: true
+            #anonymous: true
             lazy: true
 
             # The user provider to use.
@@ -41,7 +50,7 @@ security:
                 login_path: security_login
                 # Secure the login form against CSRF
                 # Reference: https://symfony.com/doc/current/security/csrf.html#csrf-protection-in-login-forms
-                csrf_token_generator: security.csrf.token_manager
+                enable_csrf: true
                 # The page users are redirect to when there is no previous page stored in the
                 # session (for example when the users access directly to the login page).
                 default_target_path: home
@@ -50,7 +59,8 @@ security:
                 # The route name the user can go to in order to logout
                 path: security_logout
                 # The name of the route to redirect to after logging out
-                target: homepage
+                target: home
+            entry_point: 'form_login'
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

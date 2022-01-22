@@ -6,14 +6,14 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, \Serializable,PasswordAuthenticatedUserInterface
 {
     const DEFAULT_ROLE = "ROLE_USER";
     const ROLE_ADMIN = "ROLE_ADMIN";
@@ -216,25 +216,49 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function serialize()
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * {@inheritdoc}
+     */
+    public function getSalt(): ?string
     {
-        return serialize([$this->id, $this->username, $this->password]);
-    }
+        // We're using bcrypt in security.yaml to encode the password, so
+        // the salt value is built-in and and you don't have to generate one
+        // See https://en.wikipedia.org/wiki/Bcrypt
 
-    public function unserialize($serialized)
-    {
-        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
-    }
-
-    public function getSalt()
-    {
         return null;
     }
 
-    public function eraseCredentials()
+    /**
+     * Removes sensitive data from the user.
+     *
+     * {@inheritdoc}
+     */
+    public function eraseCredentials(): void
     {
-        // TODO: Implement eraseCredentials() method.
+        // if you had a plainPassword property, you'd nullify it here
+        // $this->plainPassword = null;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        return serialize([$this->id, $this->username, $this->password]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized): void
+    {
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
     /**
      * Checks if the user has to be logged out of the session,
      * due to changed fields / security related settings (like roles and teams).

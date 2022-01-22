@@ -12,15 +12,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CreateUserCommand extends Command
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $encoder;
+    private $passwordHasher;
     /**
      * @var ManagerRegistry
      */
@@ -30,9 +27,9 @@ class CreateUserCommand extends Command
      */
     private $validator;
 
-    public function __construct(UserPasswordEncoderInterface $encoder, ManagerRegistry $registry, ValidatorInterface $validator)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, ManagerRegistry $registry, ValidatorInterface $validator)
     {
-        $this->encoder = $encoder;
+        $this->passwordHasher = $passwordHasher;
         $this->doctrine = $registry;
         $this->validator = $validator;
 
@@ -107,8 +104,10 @@ class CreateUserCommand extends Command
         }
 
         try {
-            $pwd = $this->encoder->encodePassword($user, $user->getFullName());
-            $user->setPassword($pwd);
+          /*  $pwd = $this->encoder->encodePassword($user, $user->getFullName());
+            $user->setPassword($pwd);*/
+            $hashedPassword = $this->passwordHasher->hashPassword($user, $user->getFullName());
+            $user->setPassword($hashedPassword);
 
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($user);
